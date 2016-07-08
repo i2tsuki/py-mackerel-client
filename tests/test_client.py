@@ -11,22 +11,11 @@
     :license: BSD, see LICENSE for more details.
 """
 import os
-import requests
 from unittest import TestCase
 from mock import patch
 from mackerel.clienthde import Client, MackerelClientError
 from mackerel.host import Host
-
-
-def dummy_response(m, filename, status_code=200):
-    response = requests.Response()
-    response.status_code = status_code
-    root_path = os.path.dirname(os.path.abspath(__file__))
-    file_path = os.path.join(root_path, filename)
-    with open(file_path, 'r') as f:
-        data = f.read()
-        response._content = data
-        m.return_value = response
+from tests.test_util import dummy_response
 
 
 class TestClient(TestCase):
@@ -169,25 +158,3 @@ class TestClient(TestCase):
         ]
         with self.assertRaises(MackerelClientError):
             self.client.post_service_metrics('foobarbaz', metrics)
-
-
-class TestHost(TestCase):
-    @classmethod
-    def setUpClass(cls):
-        api_key = os.environ.get('MACKEREL_APIKEY')
-        cls.client = Client(mackerel_api_key=api_key)
-        cls.id = 'xxxxxxxxxxx'
-
-    @patch('mackerel.clienthde.requests.get')
-    def test_should_get_ipaddress(self, m):
-        """ Host().ip_addr() should get ipaddress. """
-        dummy_response(m, 'fixtures/get_host.json')
-        host = self.client.get_host(self.id)
-        self.assertEqual(host.ip_addr(), '10.0.2.15')
-
-    @patch('mackerel.clienthde.requests.get')
-    def test_should_get_macaddress(self, m):
-        """ Host().mac_addr() should get ipaddress. """
-        dummy_response(m, 'fixtures/get_host.json')
-        host = self.client.get_host(self.id)
-        self.assertEqual(host.mac_addr(), '08:00:27:96:ed:36')
