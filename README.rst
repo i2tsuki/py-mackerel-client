@@ -1,5 +1,5 @@
 mackerel.clienthde
-===================
+==================
 .. image:: https://travis-ci.org/HDE/py-mackerel-client.svg?branch=hde-dev
     :target: https://travis-ci.org/HDE/py-mackerel-client
 
@@ -144,8 +144,7 @@ Post service metrics
 
 
 Get monitors [NEW in this forked version]
-~~~~~~~~~
-
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 .. code:: python
 
   from mackerel.clienthde import Client
@@ -189,4 +188,3 @@ Authentication
 .. code:: shell
 
   $ export MACKEREL_APIKEY=foobar
-
