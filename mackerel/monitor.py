@@ -19,6 +19,7 @@ class MonitorHost(object):
     def __init__(self, **kwargs):
         """Construct a Monitor with type == 'host'.
 
+        :param id: Monitor id (string)
         :param name: Monitor name (string)
         :param duration: Monitor interval value, in minutes, between 1 to 5 min (number)
         :param metric: Name of the host metric (string)
@@ -32,6 +33,7 @@ class MonitorHost(object):
         """
         self.args = kwargs
         self.type = 'host'
+        self.id = kwargs.get('id', None)
         self.name = kwargs.get('name', None)
         self.duration = kwargs.get('duration', None)
         self.metric = kwargs.get('metric', None)
@@ -45,10 +47,11 @@ class MonitorHost(object):
 
     def __repr__(self):
         repr = '<Monitor('
-        repr += 'type={0}, name={1}, duration={2}, metric={3}, operator={4}, '
-        repr += 'warning={5}, critical={6}, notification_interval={7}, scopes={8}, '
-        repr += 'exclude_scopes={9}, is_mute={10})'
+        repr += 'type={0}, id={1}, name={2}, duration={3}, metric={4}, operator={5}, '
+        repr += 'warning={6}, critical={7}, notification_interval={8}, scopes={9}, '
+        repr += 'exclude_scopes={10}, is_mute={11})'
         return repr.format(self.type,
+                           self.id,
                            self.name,
                            self.duration,
                            self.metric,
@@ -66,6 +69,7 @@ class MonitorService(object):
     def __init__(self, **kwargs):
         """Construct a Monitor with type == 'service'.
 
+        :param id: Monitor id (string)
         :param name: Monitor name (string)
         :param service: Name of the service targeted by monitoring (string)
         :param duration: Monitor interval value, in minutes, between 1 to 5 min (number)
@@ -78,6 +82,7 @@ class MonitorService(object):
         """
         self.args = kwargs
         self.type = 'service'
+        self.id = kwargs.get('id', None)
         self.name = kwargs.get('name', None)
         self.service = kwargs.get('service', None)
         self.duration = kwargs.get('duration', None)
@@ -90,10 +95,11 @@ class MonitorService(object):
 
     def __repr__(self):
         repr = '<Monitor('
-        repr += 'type={0}, name={1}, service={2}, duration={3}, metric={4}, '
-        repr += 'operator={5}, warning={6}, critical={7}, '
-        repr += 'notification_interval={8}, is_mute={9})'
+        repr += 'type={0}, id={1}, name={2}, service={3}, duration={4}, '
+        repr += 'metric={5}, operator={6}, warning={7}, critical={8}, '
+        repr += 'notification_interval={9}, is_mute={10})'
         return repr.format(self.type,
+                           self.id,
                            self.name,
                            self.service,
                            self.duration,
@@ -110,6 +116,7 @@ class MonitorExternal(object):
     def __init__(self, **kwargs):
         """Construct a Monitor with type == 'external'.
 
+        :param id: Monitor id (string)
         :param name: Monitor name (string)
         :param url: Monitoring target URL (string)
         :param service: [Optional] Name of the service targeted by monitoring (string)
@@ -125,6 +132,7 @@ class MonitorExternal(object):
         """
         self.args = kwargs
         self.type = 'external'
+        self.id = kwargs.get('id', None)
         self.name = kwargs.get('name', None)
         self.url = kwargs.get('url', None)
         self.service = kwargs.get('service', None)
@@ -142,12 +150,14 @@ class MonitorExternal(object):
 
     def __repr__(self):
         repr = '<Monitor('
-        repr += 'type={0}, name={1}, url={2}, service={3}, notification_interval={4}, '
-        repr += 'response_time_warning={5}, response_time_critical={6}, '
-        repr += 'response_time_duration={7}, contains_string={8}, '
-        repr += 'max_check_attempts={9}, certificate_expiration_warning={10}, '
-        repr += 'certificate_expiration_critical={11}, is_mute={12})'
+        repr += 'type={0}, id={1}, name={2}, url={3}, service={4}, '
+        repr += 'notification_interval={5}, '
+        repr += 'response_time_warning={6}, response_time_critical={7}, '
+        repr += 'response_time_duration={8}, contains_string={9}, '
+        repr += 'max_check_attempts={10}, certificate_expiration_warning={11}, '
+        repr += 'certificate_expiration_critical={12}, is_mute={13})'
         return repr.format(self.type,
+                           self.id,
                            self.name,
                            self.url,
                            self.service,
@@ -167,7 +177,7 @@ class MonitorConnectivity(object):
     def __init__(self, **kwargs):
         """Construct a Monitor with type == 'connectivity'.
 
-        :param id: Connectivity Id (string)
+        :param id: Monitor Id (string)
         :param scopes: [Optional] Monitoring target's name (array of string)
         :param exclude_scopes: [Optional] Monitoring exclusion target's name (array of string)
         :param is_mute: [Optional] Whether monitoring is muted or not (boolean)

@@ -62,6 +62,28 @@ class Client(object):
         else:
             self.logger = logger
 
+    ## HOST SECTION
+    def get_hosts(self, **kwargs):
+        """Get hosts.
+
+        :param service: Service name
+        :param roles: Service role
+        :param name: Host name
+        """
+        uri = '/api/v0/hosts.json'
+        params = {}
+        if kwargs.get('service', None):
+            params['service'] = kwargs.get('service')
+
+        if kwargs.get('roles', None):
+            params['roles'] = kwargs.get('roles')
+
+        if kwargs.get('name', None):
+            params['name'] = kwargs.get('name')
+
+        hosts = self._request(uri, params=params)
+        return [Host(**host) for host in hosts['hosts']]
+
     def get_host(self, host_id):
         """Get registered host.
 
@@ -99,6 +121,7 @@ class Client(object):
 
         return data
 
+    ## HOST METRICS SECTION
     def post_metrics(self, metrics):
         """Post metrics.
 
@@ -125,6 +148,7 @@ class Client(object):
 
         return data
 
+    ## SERVICE METRICS SECTION
     def post_service_metrics(self, service_name, metrics):
         """Post service metrics.
 
@@ -138,27 +162,7 @@ class Client(object):
 
         return data
 
-    def get_hosts(self, **kwargs):
-        """Get hosts.
-
-        :param service: Service name
-        :param roles: Service role
-        :param name: Host name
-        """
-        uri = '/api/v0/hosts.json'
-        params = {}
-        if kwargs.get('service', None):
-            params['service'] = kwargs.get('service')
-
-        if kwargs.get('roles', None):
-            params['roles'] = kwargs.get('roles')
-
-        if kwargs.get('name', None):
-            params['name'] = kwargs.get('name')
-
-        hosts = self._request(uri, params=params)
-        return [Host(**host) for host in hosts['hosts']]
-
+    ## MONITORING SECTION
     def get_monitors(self):
         """Get monitors.
 
@@ -181,6 +185,27 @@ class Client(object):
                 raise MackerelMonitorError('Type is not in defined types')
 
         return monitors
+
+    def create_monitor(self):
+        """Create monitor.
+
+        """
+        # TODO
+        return
+
+    def update_monitor(self):
+        """Update monitor.
+
+        """
+        # TODO
+        return
+
+    def delete_monitor(self):
+        """Delete monitor.
+
+        """
+        # TODO
+        return
 
     def _request(self, uri, method='GET', headers=None, params=None):
         """Request to mackerel.
@@ -210,7 +235,6 @@ class Client(object):
         if res.status_code != 200:
             message = '{0} {1} failed: {2}'.format(method, uri, res.status_code)
             raise MackerelClientError(message)
-
         data = json.loads(res.content)
 
         return data

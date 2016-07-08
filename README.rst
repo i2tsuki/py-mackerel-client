@@ -29,6 +29,8 @@ Get hosts
 
   from mackerel.clienthde import Client
 
+  # Alternatively, you can set MACKEREL_APIKEY as environment variable
+  # And simply call "client = Client()"
   client = Client(mackerel_api_key='<Put your API key')
   hosts = client.get_hosts()
 
@@ -40,6 +42,8 @@ Get host
 
   from mackerel.clienthde import Client
 
+  # Alternatively, you can set MACKEREL_APIKEY as environment variable
+  # And simply call "client = Client()"
   client = Client(mackerel_api_key='<Put your API key')
   host = client.get_host('<hostId>')
 
@@ -51,6 +55,8 @@ Update host status
 
   from mackerel.clienthde import Client
 
+  # Alternatively, you can set MACKEREL_APIKEY as environment variable
+  # And simply call "client = Client()"
   client = Client(mackerel_api_key='<Put your API key')
   # Poweroff.
   self.client.update_host_status('<hostId>', 'poweroff')
@@ -68,6 +74,8 @@ Retire host
 
   from mackerel.clienthde import Client
 
+  # Alternatively, you can set MACKEREL_APIKEY as environment variable
+  # And simply call "client = Client()"
   client = Client(mackerel_api_key='<Put your API key')
   self.client.retire_host('<hostId>')
 
@@ -79,6 +87,8 @@ Get latest metrics
 
   from mackerel.clienthde import Client
 
+  # Alternatively, you can set MACKEREL_APIKEY as environment variable
+  # And simply call "client = Client()"
   client = Client(mackerel_api_key='<Put your API key')
   # Get hostId A's and hostId B's loadavg5, memory.free value.
   metrics = self.client.get_latest_metrics(['<hostId A>', '<hostId B>'],
@@ -92,6 +102,8 @@ Post metrics
 
   from mackerel.clienthde import Client
 
+  # Alternatively, you can set MACKEREL_APIKEY as environment variable
+  # And simply call "client = Client()"
   client = Client(mackerel_api_key='<Put your API key>')
   metrics = [
       {
@@ -114,6 +126,8 @@ Post service metrics
 
   from mackerel.clienthde import Client
 
+  # Alternatively, you can set MACKEREL_APIKEY as environment variable
+  # And simply call "client = Client()"
   client = Client(mackerel_api_key='<Put your API key>')
   metrics = [
       {
@@ -129,13 +143,15 @@ Post service metrics
   self.client.post_service_metrics('service_name', metrics)
 
 
-Get monitors
+Get monitors [NEW in this forked version]
 ~~~~~~~~~
 
 .. code:: python
 
   from mackerel.clienthde import Client
 
+  # Alternatively, you can set MACKEREL_APIKEY as environment variable
+  # And simply call "client = Client()"
   client = Client(mackerel_api_key='<Put your API key')
   monitors = client.get_monitors()
 

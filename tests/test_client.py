@@ -13,10 +13,12 @@
 import os
 from unittest import TestCase
 from mock import patch
-from mackerel.clienthde import Client, MackerelClientError
+from mackerel.clienthde import Client, MackerelClientError,\
+    MackerelMonitorError
 from mackerel.host import Host
+from mackerel.monitor import MonitorHost, MonitorExternal,\
+    MonitorService, MonitorConnectivity
 from tests.test_util import dummy_response
-
 
 class TestClient(TestCase):
     @classmethod
@@ -158,3 +160,65 @@ class TestClient(TestCase):
         ]
         with self.assertRaises(MackerelClientError):
             self.client.post_service_metrics('foobarbaz', metrics)
+
+    @patch('mackerel.clienthde.requests.get')
+    def test_should_get_monitors(self, m):
+        """ Client().get_monitors() should get monitor list. """
+        dummy_response(m, 'fixtures/get_monitors.json')
+        monitors = self.client.get_monitors()
+        # Value is based on fixtures/get_monitors.json
+        for monitor in monitors:
+            print monitor
+            if monitor.type == 'host':
+                self.assertTrue(isinstance(monitor, MonitorHost))
+                self.assertEqual(monitor.id, '1ABCDabcde2')
+                self.assertEqual(monitor.name, 'loadavg5')
+                self.assertEqual(monitor.duration, 3)
+                self.assertEqual(monitor.metric, 'loadavg5')
+                self.assertEqual(monitor.operator, '>')
+                self.assertAlmostEqual(monitor.warning, 3.0)
+                self.assertAlmostEqual(monitor.critical, 5.0)
+                self.assertIsNone(monitor.notification_interval)
+                self.assertEqual(monitor.scopes, [])
+                self.assertEqual(monitor.exclude_scopes, ['projectname: v1'])
+                self.assertTrue(not monitor.is_mute)
+            elif monitor.type == 'service':
+                self.assertTrue(isinstance(monitor, MonitorService))
+                self.assertEqual(monitor.id, '1ABCDabcde3')
+                self.assertEqual(monitor.name, 'DynamoDB.ConsumedReadCapacityUnits.table-name')
+                self.assertEqual(monitor.service, 'projectname')
+                self.assertEqual(monitor.duration, 1)
+                self.assertEqual(monitor.metric, 'DynamoDB.ConsumedReadCapacityUnits.table-name')
+                self.assertEqual(monitor.operator, '>')
+                self.assertAlmostEqual(monitor.warning, 700.0)
+                self.assertAlmostEqual(monitor.critical, 900.0)
+                self.assertIsNone(monitor.notification_interval)
+                self.assertTrue(not monitor.is_mute)
+            elif monitor.type == 'external':
+                self.assertTrue(isinstance(monitor, MonitorExternal))
+                self.assertEqual(monitor.id, '1ABCDabcde4')
+                self.assertEqual(monitor.name, 'example.com')
+                self.assertEqual(monitor.url, 'https://example.com/_health/check')
+                self.assertIsNone(monitor.service)
+                self.assertIsNone(monitor.notification_interval)
+                self.assertIsNone(monitor.response_time_warning)
+                self.assertIsNone(monitor.response_time_critical)
+                self.assertIsNone(monitor.response_time_duration)
+                self.assertIsNone(monitor.contains_string)
+                self.assertEqual(monitor.max_check_attempts, 3)
+                self.assertIsNone(monitor.certificate_expiration_warning)
+                self.assertIsNone(monitor.certificate_expiration_critical)
+                self.assertTrue(not monitor.is_mute)
+            else:
+                self.assertTrue(isinstance(monitor, MonitorConnectivity))
+                self.assertEqual(monitor.id, '1ABCDabcde1')
+                self.assertEqual(monitor.scopes, [])
+                self.assertEqual(monitor.exclude_scopes, [])
+                self.assertTrue(not monitor.is_mute)
+
+    @patch('mackerel.clienthde.requests.get')
+    def test_should_raise_error_when_get_monitors_newtype(self, m):
+        """ Client().get_monitors() should raise error when type is not defined. """
+        dummy_response(m, 'fixtures/get_monitors_newtype.json')
+        with self.assertRaises(MackerelMonitorError):
+            monitors = self.client.get_monitors()
