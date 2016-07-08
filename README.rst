@@ -1,24 +1,24 @@
-mackerel.client
-===============
-.. image:: https://travis-ci.org/heavenshell/py-mackerel-client.svg?branch=master
-    :target: https://travis-ci.org/heavenshell/py-mackerel-client
+mackerel.clienthde
+===================
+.. image:: https://travis-ci.org/HDE/py-mackerel-client.svg?branch=hde-dev
+    :target: https://travis-ci.org/HDE/py-mackerel-client
 
-mackerel.client is a python library to access Mackerel (https://mackerel.io/).
+mackerel.clienthde is a python library to access Mackerel (https://mackerel.io/).
 
-This client is Ported from `mackerel-client-ruby <https://github.com/mackerelio/mackerel-client-ruby>`_.
+This project is forked from `heavenshell/py-mackerel-client <https://github.com/heavenshell/py-mackerel-client>`_, which is initially ported from `mackerel-client-ruby <https://github.com/mackerelio/mackerel-client-ruby>`_.
 
 Install
 -------
 
 .. code:: shell
 
-  $ pip install mackerel.client
+  $ pip install mackerel.clienthde
 
 
 Dependency
 ----------
 
-mackerel.client use `requests <http://docs.python-requests.org/en/latest/>`_, `simplejson <https://github.com/simplejson/simplejson>`_ and `click <http://click.pocoo.org/3/>`_.
+mackerel.clienthde use `requests <http://docs.python-requests.org/en/latest/>`_, `simplejson <https://github.com/simplejson/simplejson>`_ and `click <http://click.pocoo.org/3/>`_.
 
 Usage
 -----
@@ -27,7 +27,7 @@ Get hosts
 
 .. code:: python
 
-  from mackerel.client import Client
+  from mackerel.clienthde import Client
 
   client = Client(mackerel_api_key='<Put your API key')
   host = client.get_hosts()
@@ -38,7 +38,7 @@ Get host
 
 .. code:: python
 
-  from mackerel.client import Client
+  from mackerel.clienthde import Client
 
   client = Client(mackerel_api_key='<Put your API key')
   host = client.get_host('<hostId>')
@@ -49,7 +49,7 @@ Update host status
 
 .. code:: python
 
-  from mackerel.client import Client
+  from mackerel.clienthde import Client
 
   client = Client(mackerel_api_key='<Put your API key')
   # Poweroff.
@@ -66,7 +66,7 @@ Retire host
 
 .. code:: python
 
-  from mackerel.client import Client
+  from mackerel.clienthde import Client
 
   client = Client(mackerel_api_key='<Put your API key')
   self.client.retire_host('<hostId>')
@@ -77,7 +77,7 @@ Get latest metrics
 
 .. code:: python
 
-  from mackerel.client import Client
+  from mackerel.clienthde import Client
 
   client = Client(mackerel_api_key='<Put your API key')
   # Get hostId A's and hostId B's loadavg5, memory.free value.
@@ -90,7 +90,7 @@ Post metrics
 ~~~~~~~~~~~~
 .. code:: python
 
-  from mackerel.client import Client
+  from mackerel.clienthde import Client
 
   client = Client(mackerel_api_key='<Put your API key>')
   metrics = [
@@ -112,7 +112,7 @@ Post service metrics
 ~~~~~~~~~~~~~~~~~~~~
 .. code:: python
 
-  from mackerel.client import Client
+  from mackerel.clienthde import Client
 
   client = Client(mackerel_api_key='<Put your API key>')
   metrics = [

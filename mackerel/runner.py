@@ -10,12 +10,13 @@
     <https://github.com/mackerelio/mackerel-client-ruby>
 
     :copyright: (c) 2015 Shinya Ohyanagi, All rights reserved.
+    :copyright: (c) 2016 Iskandar Setiadi, All rights reserved.
     :license: BSD, see LICENSE for more details.
 """
 import os
 import logging
 import click
-from mackerel.client import Client
+from mackerel.clienthde import Client
 
 
 class Runner(object):

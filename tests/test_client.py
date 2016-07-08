@@ -7,13 +7,14 @@
 
 
     :copyright: (c) 2015 Shinya Ohyanagi, All rights reserved.
+    :copyright: (c) 2016 Iskandar Setiadi, All rights reserved.
     :license: BSD, see LICENSE for more details.
 """
 import os
 import requests
 from unittest import TestCase
 from mock import patch
-from mackerel.client import Client, MackerelClientError
+from mackerel.clienthde import Client, MackerelClientError
 from mackerel.host import Host
 
 
@@ -35,7 +36,7 @@ class TestClient(TestCase):
         cls.client = Client(mackerel_api_key=api_key)
         cls.id = 'xxxxxxxxxxx'
 
-    @patch('mackerel.client.requests.get')
+    @patch('mackerel.clienthde.requests.get')
     def test_should_get_hosts(self, m):
         """ Client().get_hosts() should get host list. """
         dummy_response(m, 'fixtures/get_hosts.json')
@@ -43,54 +44,54 @@ class TestClient(TestCase):
         for host in hosts:
             self.assertTrue(isinstance(host, Host))
 
-    @patch('mackerel.client.requests.get')
+    @patch('mackerel.clienthde.requests.get')
     def test_should_get_host(self, m):
         """ Client().get_hosts() should get host. """
         dummy_response(m, 'fixtures/get_host.json')
         host = self.client.get_host(self.id)
         self.assertTrue(isinstance(host, Host))
 
-    @patch('mackerel.client.requests.post')
+    @patch('mackerel.clienthde.requests.post')
     def test_should_update_host_poweroff(self, m):
         """ Client().update_host_status('poweroff') should return success. """
         dummy_response(m, 'fixtures/success.json')
         ret = self.client.update_host_status(self.id, 'poweroff')
         self.assertEqual(ret['success'], True)
-        with patch('mackerel.client.requests.get') as m:
+        with patch('mackerel.clienthde.requests.get') as m:
             dummy_response(m, 'fixtures/poweroff.json')
             host = self.client.get_host(self.id)
             self.assertEqual(host.status, 'poweroff')
 
-    @patch('mackerel.client.requests.post')
+    @patch('mackerel.clienthde.requests.post')
     def test_should_update_host_standby(self, m):
         """ Client().update_host_status('standby') should return success. """
         dummy_response(m, 'fixtures/success.json')
         ret = self.client.update_host_status(self.id, 'standby')
         self.assertEqual(ret['success'], True)
 
-        with patch('mackerel.client.requests.get') as m:
+        with patch('mackerel.clienthde.requests.get') as m:
             dummy_response(m, 'fixtures/standby.json')
             host = self.client.get_host(self.id)
             self.assertEqual(host.status, 'standby')
 
-    @patch('mackerel.client.requests.post')
+    @patch('mackerel.clienthde.requests.post')
     def test_should_update_host_working(self, m):
         """ Client().update_host_status('working') should return success. """
         dummy_response(m, 'fixtures/success.json')
         ret = self.client.update_host_status('2k48zsCx8ij', 'working')
         self.assertEqual(ret['success'], True)
-        with patch('mackerel.client.requests.get') as m:
+        with patch('mackerel.clienthde.requests.get') as m:
             dummy_response(m, 'fixtures/working.json')
             host = self.client.get_host(self.id)
             self.assertEqual(host.status, 'working')
 
-    @patch('mackerel.client.requests.post')
+    @patch('mackerel.clienthde.requests.post')
     def test_should_update_host_maintenance(self, m):
         """ Client().update_host_status('maintenance') should return success. """
         dummy_response(m, 'fixtures/success.json')
         ret = self.client.update_host_status(self.id, 'maintenance')
         self.assertEqual(ret['success'], True)
-        with patch('mackerel.client.requests.get') as m:
+        with patch('mackerel.clienthde.requests.get') as m:
             dummy_response(m, 'fixtures/maintenance.json')
             host = self.client.get_host(self.id)
             self.assertEqual(host.status, 'maintenance')
@@ -100,14 +101,14 @@ class TestClient(TestCase):
         with self.assertRaises(MackerelClientError):
             self.client.update_host_status(self.id, 'foo')
 
-    @patch('mackerel.client.requests.post')
+    @patch('mackerel.clienthde.requests.post')
     def test_should_retire(self, m):
         """ Client().retire_host() should return success. """
         dummy_response(m, 'fixtures/success.json')
         ret = self.client.retire_host(self.id)
         self.assertEqual(ret['success'], True)
 
-    @patch('mackerel.client.requests.get')
+    @patch('mackerel.clienthde.requests.get')
     def test_should_get_latest_metrics(self, m):
         """ Client().get_latest_metrics() should get metrics. """
         dummy_response(m, 'fixtures/get_latest_metrics.json')
@@ -116,7 +117,7 @@ class TestClient(TestCase):
         for k in ['loadavg5', 'memory.free']:
             self.assertTrue(k in ret['tsdbLatest'][self.id].keys())
 
-    @patch('mackerel.client.requests.post')
+    @patch('mackerel.clienthde.requests.post')
     def test_should_post_metrics(self, m):
         """ Client().post_metrics() should return success. """
         dummy_response(m, 'fixtures/success.json')
@@ -135,7 +136,7 @@ class TestClient(TestCase):
         ret = self.client.post_metrics(metrics)
         self.assertEqual(ret['success'], True)
 
-    @patch('mackerel.client.requests.post')
+    @patch('mackerel.clienthde.requests.post')
     def test_should_post_service_metrics(self, m):
         """ Client().post_service_metrics() should return success. """
         dummy_response(m, 'fixtures/success.json')
@@ -152,7 +153,7 @@ class TestClient(TestCase):
         ret = self.client.post_service_metrics('service_name', metrics)
         self.assertEqual(ret['success'], True)
 
-    @patch('mackerel.client.requests.post')
+    @patch('mackerel.clienthde.requests.post')
     def test_should_raise_error_when_service_not_found(self, m):
         """ Client().post_service_metrics() should raise error when service name not found. """
         dummy_response(m, 'fixtures/error.json', 404)
@@ -177,14 +178,14 @@ class TestHost(TestCase):
         cls.client = Client(mackerel_api_key=api_key)
         cls.id = 'xxxxxxxxxxx'
 
-    @patch('mackerel.client.requests.get')
+    @patch('mackerel.clienthde.requests.get')
     def test_should_get_ipaddress(self, m):
         """ Host().ip_addr() should get ipaddress. """
         dummy_response(m, 'fixtures/get_host.json')
         host = self.client.get_host(self.id)
         self.assertEqual(host.ip_addr(), '10.0.2.15')
 
-    @patch('mackerel.client.requests.get')
+    @patch('mackerel.clienthde.requests.get')
     def test_should_get_macaddress(self, m):
         """ Host().mac_addr() should get ipaddress. """
         dummy_response(m, 'fixtures/get_host.json')

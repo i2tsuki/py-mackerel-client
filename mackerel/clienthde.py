@@ -10,6 +10,7 @@
 
     :copyright: (c) 2014 Hatena, All rights reserved.
     :copyright: (c) 2015 Shinya Ohyanagi, All rights reserved.
+    :copyright: (c) 2016 Iskandar Setiadi, All rights reserved.
     :license: BSD, see LICENSE for more details.
 """
 import logging

@@ -14,3 +14,7 @@ parts
 .swp
 *~
 __pycache__
+
+## Others
+.idea/
+
