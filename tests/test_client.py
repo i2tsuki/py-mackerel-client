@@ -168,7 +168,6 @@ class TestClient(TestCase):
         monitors = self.client.get_monitors()
         # Value is based on fixtures/get_monitors.json
         for monitor in monitors:
-            print monitor
             if monitor.type == 'host':
                 self.assertTrue(isinstance(monitor, MonitorHost))
                 self.assertEqual(monitor.id, '1ABCDabcde2')
@@ -221,4 +220,4 @@ class TestClient(TestCase):
         """ Client().get_monitors() should raise error when type is not defined. """
         dummy_response(m, 'fixtures/get_monitors_newtype.json')
         with self.assertRaises(MackerelMonitorError):
-            monitors = self.client.get_monitors()
+            self.client.get_monitors()
