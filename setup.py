@@ -24,7 +24,7 @@ with open(rst_path) as f:
 
 setup(
     name=app_name,
-    version='0.0.1',
+    version='0.0.2',
     author='Shinya Ohyanagi, Iskandar Setiadi',
     author_email='iskandarsetiadi@gmail.com',
     url='https://github.com/HDE/py-mackerel-client',
