@@ -13,13 +13,20 @@
     :copyright: (c) 2016 Iskandar Setiadi, All rights reserved.
     :license: BSD, see LICENSE for more details.
 """
+import os
 import logging
 import requests
 import simplejson as json
 from mackerel.host import Host
+from mackerel.monitor import MonitorHost, MonitorExternal,\
+    MonitorService, MonitorConnectivity
 
 
 class MackerelClientError(Exception):
+    pass
+
+
+class MackerelMonitorError(Exception):
     pass
 
 
@@ -40,6 +47,10 @@ class Client(object):
         """
         self.origin = kwargs.get('mackerel_origin', 'https://mackerel.io')
         api_key = kwargs.get('mackerel_api_key', None)
+        # Check api_key from environment variable
+        if api_key is None:
+            api_key = os.environ.get('MACKEREL_APIKEY', None)
+        # Fail if api_key is still None
         if api_key is None:
             raise MackerelClientError(self.ERROR_MESSAGE_FOR_API_KEY_ABSENCE)
 
@@ -147,6 +158,29 @@ class Client(object):
 
         hosts = self._request(uri, params=params)
         return [Host(**host) for host in hosts['hosts']]
+
+    def get_monitors(self):
+        """Get monitors.
+
+        """
+        uri = '/api/v0/monitors'
+        data = self._request(uri)
+
+        monitors = []
+
+        for entity in data['monitors']:
+            if entity['type'] == 'host':
+                monitors.append(MonitorHost(**entity))
+            elif entity['type'] == 'service':
+                monitors.append(MonitorService(**entity))
+            elif entity['type'] == 'external':
+                monitors.append(MonitorExternal(**entity))
+            elif entity['type'] == 'connectivity':
+                monitors.append(MonitorConnectivity(**entity))
+            else:
+                raise MackerelMonitorError('Type is not in defined types')
+
+        return monitors
 
     def _request(self, uri, method='GET', headers=None, params=None):
         """Request to mackerel.

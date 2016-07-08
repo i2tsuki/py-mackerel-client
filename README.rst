@@ -30,7 +30,7 @@ Get hosts
   from mackerel.clienthde import Client
 
   client = Client(mackerel_api_key='<Put your API key')
-  host = client.get_hosts()
+  hosts = client.get_hosts()
 
 
 Get host
@@ -127,6 +127,17 @@ Post service metrics
   ]
   # Post 'custom.metrics.latency' and 'custom.metrics.uptime' to `service_name`.
   self.client.post_service_metrics('service_name', metrics)
+
+
+Get monitors
+~~~~~~~~~
+
+.. code:: python
+
+  from mackerel.clienthde import Client
+
+  client = Client(mackerel_api_key='<Put your API key')
+  monitors = client.get_monitors()
 
 
 CLI
