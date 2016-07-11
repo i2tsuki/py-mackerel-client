@@ -186,26 +186,44 @@ class Client(object):
 
         return monitors
 
-    def create_monitor(self):
+    def create_monitor(self, monitor_params):
         """Create monitor.
 
+        :param monitor_params: Parameter list of new Monitor
         """
-        # TODO
-        return
+        uri = '/api/v0/monitors'
+        headers = {'Content-Type': 'application/json'}
+        params = json.dumps(monitor_params)
 
-    def update_monitor(self):
+        data = self._request(uri, method='POST', headers=headers, params=params)
+
+        return data
+
+    def update_monitor(self, monitor_id, monitor_params):
         """Update monitor.
 
+        :param monitor_id: Monitor id
+        :param monitor_params: Parameter list of updated Monitor
         """
-        # TODO
-        return
+        uri = '/api/v0/monitors/{0}'.format(monitor_id)
+        headers = {'Content-Type': 'application/json'}
+        params = json.dumps(monitor_params)
 
-    def delete_monitor(self):
+        data = self._request(uri, method='PUT', headers=headers, params=params)
+
+        return data
+
+    def delete_monitor(self, monitor_id):
         """Delete monitor.
 
+        :param monitor_id: Monitor id
         """
-        # TODO
-        return
+        uri = '/api/v0/monitors/{0}'.format(monitor_id)
+        headers = {'Content-Type': 'application/json'}
+
+        data = self._request(uri, method='DELETE', headers=headers)
+
+        return data
 
     def _request(self, uri, method='GET', headers=None, params=None):
         """Request to mackerel.
@@ -226,6 +244,10 @@ class Client(object):
             res = requests.get(uri, headers=headers, params=params)
         elif method == 'POST':
             res = requests.post(uri, headers=headers, data=params)
+        elif method == 'PUT':
+            res = requests.put(uri, headers=headers, data=params)
+        elif method == 'DELETE':
+            res = requests.delete(uri, headers=headers, data=params)
         else:
             message = '{0} is not supported.'.format(method)
             raise NotImplementedError(message)

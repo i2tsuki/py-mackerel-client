@@ -19,7 +19,7 @@ class MonitorHost(object):
     def __init__(self, **kwargs):
         """Construct a Monitor with type == 'host'.
 
-        :param id: Monitor id (string)
+        :param id: [Generated] Monitor id (string)
         :param name: Monitor name (string)
         :param duration: Monitor interval value, in minutes, between 1 to 5 min (number)
         :param metric: Name of the host metric (string)
@@ -45,6 +45,25 @@ class MonitorHost(object):
         self.exclude_scopes = kwargs.get('excludeScopes', None)
         self.is_mute = kwargs.get('isMute', None)
 
+    def _to_post_params_dict(self):
+        params = {}
+        params['type'] = self.type
+        params['name'] = self.name
+        params['duration'] = self.duration
+        params['metric'] = self.metric
+        params['operator'] = self.operator
+        params['warning'] = self.warning
+        params['critical'] = self.critical
+        if self.notification_interval:
+            params['notificationInterval'] = self.notification_interval
+        if self.scopes:
+            params['scopes'] = self.scopes
+        if self.exclude_scopes:
+            params['excludeScopes'] = self.exclude_scopes
+        if self.is_mute:
+            params['isMute'] = self.is_mute
+        return params
+
     def __repr__(self):
         repr = '<Monitor('
         repr += 'type={0}, id={1}, name={2}, duration={3}, metric={4}, operator={5}, '
@@ -69,10 +88,10 @@ class MonitorService(object):
     def __init__(self, **kwargs):
         """Construct a Monitor with type == 'service'.
 
-        :param id: Monitor id (string)
+        :param id: [Generated] Monitor id (string)
         :param name: Monitor name (string)
         :param service: Name of the service targeted by monitoring (string)
-        :param duration: Monitor interval value, in minutes, between 1 to 5 min (number)
+        :param duration: Monitor interval value - designated number of points (number)
         :param metric: Name of the host metric (string)
         :param operator: Determine the condition of ">" or "<" (string)
         :param warning: Threshold that generate a warning alert (number)
@@ -92,6 +111,22 @@ class MonitorService(object):
         self.critical = kwargs.get('critical', None)
         self.notification_interval = kwargs.get('notificationInterval', None)
         self.is_mute = kwargs.get('isMute', None)
+
+    def _to_post_params_dict(self):
+        params = {}
+        params['type'] = self.type
+        params['name'] = self.name
+        params['service'] = self.service
+        params['duration'] = self.duration
+        params['metric'] = self.metric
+        params['operator'] = self.operator
+        params['warning'] = self.warning
+        params['critical'] = self.critical
+        if self.notification_interval:
+            params['notificationInterval'] = self.notification_interval
+        if self.is_mute:
+            params['isMute'] = self.is_mute
+        return params
 
     def __repr__(self):
         repr = '<Monitor('
@@ -116,7 +151,7 @@ class MonitorExternal(object):
     def __init__(self, **kwargs):
         """Construct a Monitor with type == 'external'.
 
-        :param id: Monitor id (string)
+        :param id: [Generated] Monitor id (string)
         :param name: Monitor name (string)
         :param url: Monitoring target URL (string)
         :param service: [Optional] Name of the service targeted by monitoring (string)
@@ -148,6 +183,35 @@ class MonitorExternal(object):
             kwargs.get('certificateExpirationCritical', None)
         self.is_mute = kwargs.get('isMute', None)
 
+    def _to_post_params_dict(self):
+        params = {}
+        params['type'] = self.type
+        params['name'] = self.name
+        params['url'] = self.url
+        if self.service:
+            params['service'] = self.service
+        if self.notification_interval:
+            params['notificationInterval'] = self.notification_interval
+        if self.response_time_warning:
+            params['responseTimeWarning'] = self.response_time_warning
+        if self.response_time_critical:
+            params['responseTimeCritical'] = self.response_time_critical
+        if self.response_time_duration:
+            params['responseTimeDuration'] = self.response_time_duration
+        if self.contains_string:
+            params['containsString'] = self.contains_string
+        if self.max_check_attempts:
+            params['maxCheckAttempts'] = self.max_check_attempts
+        if self.certificate_expiration_warning:
+            params['certificateExpirationWarning'] = \
+                self.certificate_expiration_warning
+        if self.certificate_expiration_critical:
+            params['certificateExpirationCritical'] = \
+                self.certificate_expiration_critical
+        if self.is_mute:
+            params['isMute'] = self.is_mute
+        return params
+
     def __repr__(self):
         repr = '<Monitor('
         repr += 'type={0}, id={1}, name={2}, url={3}, service={4}, '
@@ -177,7 +241,7 @@ class MonitorConnectivity(object):
     def __init__(self, **kwargs):
         """Construct a Monitor with type == 'connectivity'.
 
-        :param id: Monitor Id (string)
+        :param id: [Generated] Monitor Id (string)
         :param scopes: [Optional] Monitoring target's name (array of string)
         :param exclude_scopes: [Optional] Monitoring exclusion target's name (array of string)
         :param is_mute: [Optional] Whether monitoring is muted or not (boolean)
