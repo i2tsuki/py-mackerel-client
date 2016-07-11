@@ -163,9 +163,10 @@ class Client(object):
         return data
 
     ## MONITORING SECTION
-    def get_monitors(self):
+    def get_monitors(self, ids=None):
         """Get monitors.
 
+        :param ids: List of Monitor Ids to be searched, if it doesn't exist, return None as value
         """
         uri = '/api/v0/monitors'
         data = self._request(uri)
@@ -184,7 +185,19 @@ class Client(object):
             else:
                 raise MackerelMonitorError('Type is not in defined types')
 
-        return monitors
+        if not ids:
+            return monitors
+
+        # If list of monitor ids is specified, search it by order
+        monitor_targets = []
+        for id in ids:
+            target = None
+            for monitor in monitors:
+                if monitor.id == id:
+                    target = monitor
+            monitor_targets.append(target)
+
+        return monitor_targets
 
     def create_monitor(self, monitor_params):
         """Create monitor.
