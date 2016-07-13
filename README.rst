@@ -3,6 +3,9 @@ mackerel.clienthde
 .. image:: https://travis-ci.org/HDE/py-mackerel-client.svg?branch=hde-dev
     :target: https://travis-ci.org/HDE/py-mackerel-client
 
+.. image:: https://coveralls.io/repos/github/HDE/py-mackerel-client/badge.svg?branch=hde-dev
+    :target: https://coveralls.io/github/HDE/py-mackerel-client?branch=hde-dev
+
 mackerel.clienthde is a python library to access Mackerel (https://mackerel.io/).
 
 This project is forked from `heavenshell/py-mackerel-client <https://github.com/heavenshell/py-mackerel-client>`_, which is initially ported from `mackerel-client-ruby <https://github.com/mackerelio/mackerel-client-ruby>`_.
@@ -168,14 +171,14 @@ Create monitor [NEW in this forked version]
   client = Client(mackerel_api_key='<Put your API key')
   # Create monitor as specified in https://mackerel.io/api-docs/entry/monitors#create
   params = {
-      "type": "service",
-      "name": "ConsumedReadCapacityUnits.table-name",
-      "service": "HDE",
-      "duration": 1,
-      "metric": "ConsumedReadCapacityUnits.table-name",
-      "operator": ">",
-      "warning": "700",
-      "critical": "900"
+      'type': 'service',
+      'name': 'ConsumedReadCapacityUnits.table-name',
+      'service': 'HDE',
+      'duration': 1,
+      'metric': 'ConsumedReadCapacityUnits.table-name',
+      'operator': '>',
+      'warning': 700,
+      'critical': 900
   }
   # Post params to Mackerel
   # result['id'] will give Monitor id if create operation succeeded

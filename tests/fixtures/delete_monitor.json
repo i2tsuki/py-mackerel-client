@@ -1,0 +1,1 @@
+{"id":"1ABCDabcde1","type":"service","isMute":false,"name":"ConsumedReadCapacityUnits.table-name","service":"HDE","metric":"ConsumedReadCapacityUnits.table-name","operator":">","warning":700.0,"critical":900.0,"duration":1}
