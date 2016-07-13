@@ -157,6 +157,68 @@ Get monitors [NEW in this forked version]
   monitor_targets = client.get_monitors(ids=['1ABCDabcde1'])
 
 
+Create monitor [NEW in this forked version]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. code:: python
+
+  from mackerel.clienthde import Client
+
+  # Alternatively, you can set MACKEREL_APIKEY as environment variable
+  # And simply call "client = Client()"
+  client = Client(mackerel_api_key='<Put your API key')
+  # Create monitor as specified in https://mackerel.io/api-docs/entry/monitors#create
+  params = {
+      "type": "service",
+      "name": "ConsumedReadCapacityUnits.table-name",
+      "service": "HDE",
+      "duration": 1,
+      "metric": "ConsumedReadCapacityUnits.table-name",
+      "operator": ">",
+      "warning": "700",
+      "critical": "900"
+  }
+  # Post params to Mackerel
+  # result['id'] will give Monitor id if create operation succeeded
+  result = client.create_monitor(params)
+
+
+Update monitor [NEW in this forked version]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. code:: python
+
+  from mackerel.clienthde import Client
+
+  # Alternatively, you can set MACKEREL_APIKEY as environment variable
+  # And simply call "client = Client()"
+  client = Client(mackerel_api_key='<Put your API key')
+  # Since update Monitor requires all fields to be specified,
+  # it is suggested to retrieve the latest value first
+  monitor_id = '1ABCDabcde1'
+  monitors = client.get_monitors(ids=[monitor_id])
+  monitor = monitors[monitor_id]
+  # In this example, we assume Monitor is class of MonitorService
+  monitor.warning = 800
+  monitor.critical = 1000
+  # Update params to Mackerel
+  result = client.update_monitor(
+      monitor_id=monitor_id,
+      monitor_params=monitor._to_post_params_dict()
+  )
+
+
+Delete monitor [NEW in this forked version]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. code:: python
+
+  from mackerel.clienthde import Client
+
+  # Alternatively, you can set MACKEREL_APIKEY as environment variable
+  # And simply call "client = Client()"
+  client = Client(mackerel_api_key='<Put your API key')
+  # Delete Monitor
+  result = client.delete_monitor(monitor_id='1ABCDabcde1')
+
+
 CLI
 ---
 
