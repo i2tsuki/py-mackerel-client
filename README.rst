@@ -152,7 +152,9 @@ Get monitors [NEW in this forked version]
   # Alternatively, you can set MACKEREL_APIKEY as environment variable
   # And simply call "client = Client()"
   client = Client(mackerel_api_key='<Put your API key')
-  monitors = client.get_monitors()
+  monitors = client.get_monitors()  # list all Monitors
+  # Specify list of ids to search, return a dict with id as key
+  monitor_targets = client.get_monitors(ids=['1ABCDabcde1'])
 
 
 CLI

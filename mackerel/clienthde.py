@@ -189,13 +189,14 @@ class Client(object):
             return monitors
 
         # If list of monitor ids is specified, search it by order
-        monitor_targets = []
+        monitor_targets = {}
         for id in ids:
             target = None
             for monitor in monitors:
                 if monitor.id == id:
                     target = monitor
-            monitor_targets.append(target)
+                    break
+            monitor_targets[id] = target
 
         return monitor_targets
 
