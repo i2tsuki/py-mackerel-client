@@ -18,7 +18,7 @@ import logging
 import requests
 import simplejson as json
 from mackerel.host import Host
-from mackerel.monitor import MonitorHost, MonitorExternal,\
+from mackerel.monitor import MonitorHost, MonitorExternal, \
     MonitorService, MonitorConnectivity
 
 
@@ -31,7 +31,6 @@ class MackerelMonitorError(Exception):
 
 
 class Client(object):
-
     #: Mackerel apikey error message.
     ERROR_MESSAGE_FOR_API_KEY_ABSENCE = 'API key is absent. Set your API key in a environment variable called MACKEREL_APIKEY.'
     #: Log format.
@@ -144,6 +143,20 @@ class Client(object):
         names_query = '&'.join(['name={0}'.format(name) for name in names])
         uri = '/api/v0/tsdb/latest?{0}&{1}'.format(hosts_query, names_query)
 
+        data = self._request(uri)
+
+        return data
+
+    def get_host_metrics(self, host_id, name, from_, to):
+        """Get host metrics.
+
+        :param host_id: Host id
+        :param name: Metric name
+        :param from_: Start of the time period you want metrics for (unix time)
+        :param to: End of the time period you want metrics for (unix time)
+        :return: Host metrics
+        """
+        uri = '/api/v0/hosts/{0}/metrics?name={1}&from={2}&to={3}'.format(host_id, name, from_, to)
         data = self._request(uri)
 
         return data

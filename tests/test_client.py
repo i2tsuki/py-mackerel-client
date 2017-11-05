@@ -13,12 +13,13 @@
 import os
 from unittest import TestCase
 from mock import patch
-from mackerel.clienthde import Client, MackerelClientError,\
+from mackerel.clienthde import Client, MackerelClientError, \
     MackerelMonitorError
 from mackerel.host import Host
-from mackerel.monitor import MonitorHost, MonitorExternal,\
+from mackerel.monitor import MonitorHost, MonitorExternal, \
     MonitorService, MonitorConnectivity
 from tests.test_util import dummy_response
+
 
 class TestClient(TestCase):
     @classmethod
@@ -107,6 +108,20 @@ class TestClient(TestCase):
                                              ['loadavg5', 'memory.free'])
         for k in ['loadavg5', 'memory.free']:
             self.assertTrue(k in ret['tsdbLatest'][self.id].keys())
+
+    @patch('mackerel.clienthde.requests.get')
+    def test_should_get_host_metrics(self, m):
+        """ Client().get_host_metrics() should get host metrics. """
+        dummy_response(m, 'fixtures/get_host_metrics.json')
+        ret = self.client.get_host_metrics(self.id, 'loadavg5', 1509825307, 1509911697)
+        metrics = {'metrics':
+            [
+                {'time': 1509825360, 'value': 1.6},
+                {'time': 1509825420, 'value': 1.49},
+                {'time': 1509825480, 'value': 1.4}
+            ]
+        }
+        self.assertEqual(ret, metrics)
 
     @patch('mackerel.clienthde.requests.post')
     def test_should_post_metrics(self, m):
