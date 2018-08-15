@@ -161,6 +161,30 @@ class Client(object):
 
         return data
 
+    ## GRAPH DEFINITION
+    def create_graph_definition(self, name, display_name, unit, metrics):
+        """Create graph definition.
+
+        :param name: Name before the last of the metric name. It must start with `custom`.
+        :param display_name: [optional] Display name of the graph.
+        :param unit: [optional] The unit in the graph. Possible values are `float`, `integer`, `percentage`, `bytes`, `bytes / sec`, `iops`.
+        :param metrics: Metrics
+        """
+
+        uri = '/api/v0/graph-defs/create'
+        headers = {'Content-Type': 'application/json'}
+        params = [
+            {
+                "name": name,
+                "displayName": display_name,
+                "unit": unit,
+                "metrics": metrics,
+            }
+        ]
+        data = self._request(uri, method='POST', headers=headers, params=json.dumps(params))
+
+        return data
+
     ## SERVICE METRICS SECTION
     def post_service_metrics(self, service_name, metrics):
         """Post service metrics.
