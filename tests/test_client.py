@@ -124,6 +124,18 @@ class TestClient(TestCase):
         self.assertEqual(ret, metrics)
 
     @patch('mackerel.clienthde.requests.post')
+    def test_should_create_graph_definition(self, m):
+        """ Client().create_graph_definition() should return success. """
+        dummy_response(m, 'fixtures/success.json')
+        ret = self.client.create_graph_definition(
+            "custom.cpu.foo",
+            "CPU",
+            "percentage",
+            [{"name": "custom.cpu.foo.user", "displayName": "CPU User", "IsStacked": True}]
+        )
+        self.assertEqual(ret['success'], True)
+
+    @patch('mackerel.clienthde.requests.post')
     def test_should_post_metrics(self, m):
         """ Client().post_metrics() should return success. """
         dummy_response(m, 'fixtures/success.json')
