@@ -131,7 +131,7 @@ class TestClient(TestCase):
             "custom.cpu.foo",
             "CPU",
             "percentage",
-            [{"name": "custom.cpu.foo.user", "displayName": "CPU User", "IsStacked": True}]
+            [{"name": "custom.cpu.foo.user", "displayName": "CPU User", "isStacked": True}]
         )
         self.assertEqual(ret['success'], True)
 
