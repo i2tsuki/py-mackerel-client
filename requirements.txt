@@ -1,4 +1,4 @@
-requests
-click
-simplejson
-mock
+requests==2.19.1
+click==6.7
+simplejson==3.16.0
+mock==2.0.0
