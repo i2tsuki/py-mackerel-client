@@ -17,6 +17,7 @@ import os
 import logging
 import requests
 import simplejson as json
+from mackerel.service import Service
 from mackerel.host import Host
 from mackerel.monitor import MonitorHost, MonitorExternal, \
     MonitorService, MonitorConnectivity
@@ -60,6 +61,14 @@ class Client(object):
             self.logger = logging.getLogger('mackerel.client')
         else:
             self.logger = logger
+
+    ## SERVICE SECTION
+    def get_services(self):
+        """Get services.
+        """
+        uri = '/api/v0/services'
+        data = self._request(uri)
+        return Service(**data['services'])
 
     ## HOST SECTION
     def get_hosts(self, **kwargs):
